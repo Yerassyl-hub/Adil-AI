@@ -1,162 +1,62 @@
-# AdilAI - Юридический помощник
+## AdilAI
 
-React Native приложение на Expo SDK 51 для получения юридических консультаций с помощью ИИ.
+React Native + Expo mobile app that integrates with a FastAPI backend to deliver AI-assisted contracts, chat, and document flows for legal professionals.
 
-## Установка и запуск
+### What’s in this repo
+- Expo SDK 51 / React Native 0.74, TypeScript, Zustand, react-navigation
+- Custom UI kit in `app/components/ui`, state stores in `app/store`, and localization in `app/i18n`
+- API clients in `app/services` talking to `/health`, `/v1/analyze/contract`, `/v1/documents/upload`, `/v1/chat`
+- PDF helpers, notifications, and mock data to keep the UI working offline
 
-### 1. Установка зависимостей
+### Requirements
+1. Node.js 20+ (bundled with npm)
+2. Expo CLI (`npm install -g expo-cli` if missing)
+3. Android Studio / Xcode / web browser for testing targets
 
-```bash
-npm install
+### Setup
+1. Install dependencies: `npm install`
+2. Copy environment template: `cp .env.example .env`
+3. Update `.env` with the backend URL/API key, e.g.:
+   ```text
+   API_URL=http://127.0.0.1:8000
+   API_KEY=superdev123
+   TENANT_ID=default
+   NOTIFICATIONS_ENABLED=true
+   ```
+4. Start Expo: `npx expo start`
+   - `a` launches Android (uses `http://10.0.2.2:8000`)
+   - `i` launches iOS or iOS simulator
+   - `w` runs the web client
+
+### Backend considerations
+- The mobile client polls `/health` and requires the FastAPI server to expose `/v1/analyze/contract`, `/v1/documents/upload`, and `/v1/chat`.
+- For real devices or CI, expose the API using ngrok or your own HTTPS host and point `API_URL` there with the same `API_KEY`.
+- Use `app/services/mock.ts` to emulate backend responses when the API is unavailable.
+
+### Testing & linting
 ```
-
-### 2. Настройка окружения
-
-Скопируйте `.env.example` в `.env` и настройте переменные:
-
-```bash
-cp .env.example .env
-```
-
-Отредактируйте `.env` (значения по умолчанию подойдут для локальной разработки):
-```
-API_URL=http://127.0.0.1:8000
-API_KEY=superdev123
-TENANT_ID=default
-NOTIFICATIONS_ENABLED=true
-```
-
-### 3. Запуск приложения
-
-```bash
-npx expo start
-```
-
-Затем выберите платформу:
-- `a` для Android
-- `i` для iOS
-- `w` для Web
-
-## Структура проекта
-
-```
-app/
-  components/
-    ui/          # Базовые UI компоненты (Button, Card, Input, etc.)
-    common/      # Общие компоненты (ProgressBar, SearchBar, Avatar, etc.)
-    chat/        # Компоненты чата (MessageBubble, AnswerBlock, LawTabs, etc.)
-  screens/       # Экраны приложения
-  services/      # API клиенты, моки, утилиты (PDF, изображения, уведомления)
-  store/         # Zustand stores (auth, chat, checklist, etc.)
-  theme/         # Тема (светлая/тёмная)
-  i18n/          # Локализация (ru.json, kz.json)
-  types/         # TypeScript типы
-  utils/         # Утилиты (даты, форматирование, валидация)
-  navigation/    # Навигация (Stack + Bottom Tabs)
-  env.ts         # Конфигурация окружения
-```
-
-## Основные функции
-
-- **Доступ к API**: Все запросы (кроме `/health`) выполняются с помощью Bearer API-ключа
-- **Чат с ИИ**: Задавайте юридические вопросы и получайте ответы с указанием законов и чек-листов
-- **Чек-листы**: Отслеживание процессов (например, регистрация ТОО) с экспортом в PDF
-- **Конструктор документов**: Создание документов с предпросмотром и экспортом в PDF
-- **Календарь**: События и дедлайны с напоминаниями
-- **История**: История всех чатов и действий
-- **Настройки**: Смена языка (RU/KZ), темы (светлая/тёмная/системная), уведомления
-
-## API контракт
-
-Приложение взаимодействует с новым FastAPI-бэкендом по следующим эндпоинтам:
-
-- `GET /health` – проверка доступности сервиса (без авторизации)
-- `POST /v1/analyze/contract` – анализ договора по текстовому запросу
-- `POST /v1/documents/upload` – загрузка документа (поле `file` в `multipart/form-data`)
-- `POST /v1/chat` – чат с ассистентом (массив сообщений `{ role, content }`)
-
-## Оффлайн режим
-
-Если API недоступен, критичные экраны (чат, загрузка) пытаются gracefully переключиться на мок-данные из `app/services/mock.ts`, чтобы сохранить демо-функциональность.
-
-## Настройка API URL
-
-- **Android эмулятор**: по умолчанию используется `http://10.0.2.2:8000`
-- **iOS симулятор / Web**: по умолчанию `http://127.0.0.1:8000`
-- **Реальное устройство**: запустите Expo с переменными окружения:
-
-  ```bash
-  API_URL="https://<ngrok>.ngrok-free.app" API_KEY="superdev123" TENANT_ID="default" npx expo start --clear
-  ```
-
-- Для локальной сети вместо ngrok можно указать IP хоста: `API_URL="http://192.168.x.x:8000"`
-
-На Android разрешён незашифрованный трафик (`useCleartextTraffic: true`), для реальных устройств используйте HTTPS (ngrok).
-
-Экран `Debug` (доступен в настройках) помогает прогнать `/health`, `/v1/analyze/contract` и `/v1/chat`, а `HealthBadge` на главном экране всегда показывает текущий базовый URL и статус подключения.
-
-## Размещение ресурсов
-
-Поместите PNG/SVG файлы из Figma в `app/assets/` и импортируйте их:
-
-```typescript
-const image = require('../assets/image.png');
-```
-
-## Обновление локализации
-
-Отредактируйте файлы:
-- `app/i18n/ru.json` - Русский язык
-- `app/i18n/kz.json` - Казахский язык
-
-После изменений перезапустите приложение.
-
-## Известные проблемы
-
-- **Разрешения**: На iOS/Android может потребоваться ручное предоставление разрешений для камеры и уведомлений
-- **PDF на iOS**: Экспорт PDF может иметь особенности на iOS - используйте системный диалог печати
-- **WebView**: Предпросмотр документов в WebView может требовать дополнительной настройки на некоторых платформах
-
-## Тестирование
-
-```bash
 npm test
-```
-
-## Линтинг и форматирование
-
-```bash
 npm run lint
 npm run lint:fix
 npm run format
 ```
 
-## Сборка
-
-```bash
-# Android
+### Build
+```
 npx expo build:android
-
-# iOS
 npx expo build:ios
 ```
 
-## Технологии
+### Publishing to GitHub
+1. Commit your current work: `git add .` / `git commit -m "..."`.
+2. Set the remote (once per repo):
+   ```
+   git remote add origin https://github.com/Yerassyl-hub/Adil-AI.git
+   git branch -M main
+   git push -u origin main
+   ```
+3. Future updates just need `git push`.
 
-- **Expo SDK 51** (React Native 0.74.x)
-- **TypeScript**
-- **Zustand** - управление состоянием
-- **React Navigation** - навигация
-- **React Hook Form + Zod** - формы и валидация
-- **i18next** - интернационализация
-- **fetch + кастомный клиент** - HTTP-запросы с поддержкой API ключей, таймаутами и нормализованными ошибками
-- **Expo Print** - генерация PDF
-- **Expo Image Picker** - выбор изображений
-- **Expo Notifications** - уведомления
-
-## Лицензия
-
-MIT
-
-
-
+### Next steps
+- Replace the placeholder analytics/config values in `app/env.ts` with prod-ready secrets before shipping.
+- Attach the required Figma assets to `app/assets/` if not already present.
