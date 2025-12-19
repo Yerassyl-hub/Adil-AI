@@ -1,0 +1,161 @@
+{
+  "onboarding": {
+    "title1": "Your Legal Assistant",
+    "title2": "Instant Answers to Questions",
+    "title3": "Checklists and Documents",
+    "description1": "Get immediate legal answers powered by AI",
+    "description2": "Find the information you need in seconds",
+    "description3": "Track processes and build documents",
+    "skip": "Skip",
+    "next": "Next",
+    "start": "Get started"
+  },
+  "auth": {
+    "login": "Sign in",
+    "email": "Email",
+    "password": "Password",
+    "email_placeholder": "Enter your email",
+    "password_placeholder": "Enter your password",
+    "login_error": "Sign-in error",
+    "invalid_credentials": "Invalid email or password"
+  },
+  "home": {
+    "greeting": "Welcome",
+    "search_placeholder": "Ask your legal question",
+    "quick_cases": "Quick cases",
+    "top_questions_title": "Top 10 popular questions",
+    "show_answer": "Show answer",
+    "hide_answer": "Hide answer",
+    "top_questions": [
+      {
+        "question": "How do I register as a sole proprietor in Kazakhstan?",
+        "answer": "Submit an online application via eGov or the eGov Mobile app, sign it with your digital signature, choose the tax regime, and receive the registration notice. The process usually takes 1–2 business days."
+      },
+      {
+        "question": "What taxes does an SP pay under the simplified regime?",
+        "answer": "An SP on the simplified regime pays a unified 3% tax on revenue (1.5% individual income tax and 1.5% social contributions) plus mandatory pension and medical insurance contributions when employees are hired."
+      },
+      {
+        "question": "Can I operate without a cash register?",
+        "answer": "An SP without employees that provides household services and accepts only non-cash payments may work without a cash register after registering POS control and issuing electronic receipts to customers."
+      },
+      {
+        "question": "How do I sign an employment contract with an employee?",
+        "answer": "Prepare a written contract covering working conditions, schedule, and remuneration, sign it with the parties, register it in the Unified Employment Portal, and issue an employment order."
+      },
+      {
+        "question": "What should I do during a government inspection?",
+        "answer": "Check the inspection notice, verify inspectors’ IDs, keep an inspection report, and record comments. You can file objections and appeal the inspection results."
+      },
+      {
+        "question": "How can I terminate a lease agreement unilaterally?",
+        "answer": "Review the lease terms—most templates require 30 days’ notice. Send written notice to the landlord by registered mail and arrange the return of the premises via an acceptance act."
+      },
+      {
+        "question": "How do I register a trademark?",
+        "answer": "Prepare a list of goods and services, ensure the mark is unique, file an application with Qazpatent, and pay the fees. Registration usually takes 8–12 months."
+      },
+      {
+        "question": "What documents are required to export goods?",
+        "answer": "Typically you need the foreign trade contract, invoice, packing list, export declaration, certificates of origin and compliance. The exact list depends on the product and destination country."
+      },
+      {
+        "question": "How do I move an employee to remote work?",
+        "answer": "Sign an addendum to the employment contract defining remote work terms, communication channels, and reporting. Provide safety instructions and brief the employee on data protection rules."
+      },
+      {
+        "question": "What if my counterparty does not pay the invoice?",
+        "answer": "Send a written claim with the outstanding amount and payment deadline, attach the contract and acceptance acts. If there is no response, file a lawsuit or use an order-for-payment procedure."
+      }
+    ],
+    "recent": "Recent",
+    "recent_empty": "No recent questions yet"
+  },
+  "chat": {
+    "ask_placeholder": "Ask your legal question",
+    "send": "Send",
+    "attach_photo": "Attach photo",
+    "attach_document": "Attach document",
+    "photo_attachment": "Photo {{index}}",
+    "document_attachment": "Document",
+    "sources": "Sources",
+    "open_source": "Open source",
+    "answer": "Answer",
+    "source_unavailable": "Source unavailable",
+    "confidence": "Confidence",
+    "confidence_low": "Low",
+    "confidence_mid": "Medium",
+    "confidence_high": "High",
+    "law": "Law",
+    "checklist": "Checklist",
+    "explanation": "Explanation",
+    "thinking": "Assistant is thinking..."
+  },
+  "checklist": {
+    "title": "Checklist",
+    "progress": "Progress",
+    "export_pdf": "Export to PDF",
+    "item_done": "Done",
+    "item_pending": "Pending",
+    "due_date": "Due date",
+    "critical": "Critical"
+  },
+  "document": {
+    "title": "Document builder",
+    "preview": "Preview",
+    "export_pdf": "Export to PDF",
+    "parties": "Parties",
+    "city": "City",
+    "subject": "Subject",
+    "date_start": "Start date",
+    "date_end": "End date",
+    "save": "Save"
+  },
+  "calendar": {
+    "title": "Calendar",
+    "all": "All",
+    "ip": "Sole proprietorship",
+    "too": "LLP",
+    "taxes": "Taxes",
+    "no_events": "No events",
+    "reminder": "Reminder"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "language_ru": "Russian",
+    "language_kz": "Kazakh",
+    "language_en": "English",
+    "theme": "Theme",
+    "theme_light": "Light",
+    "theme_dark": "Dark",
+    "theme_system": "System",
+    "notifications": "Notifications",
+    "logging": "Logging",
+    "clear_data": "Clear data",
+    "send_feedback": "Send feedback",
+    "logout": "Sign out",
+    "profile": "Profile"
+  },
+  "history": {
+    "title": "History",
+    "empty": "History is empty",
+    "empty_description": "Start a conversation with the assistant to see it recorded here.",
+    "clear_all": "Clear all",
+    "clear_all_title": "Clear history",
+    "clear_all_confirm": "Remove the entire chat history? This action cannot be undone.",
+    "remove_entry_title": "Remove entry",
+    "remove_entry_confirm": "Remove this question and answer from history?"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close"
+  }
+}
+
