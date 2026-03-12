@@ -25,43 +25,50 @@ PERPLEXITY_URL = "https://api.perplexity.ai/chat/completions"
 
 @app.get("/health")
 def health():
-    return {"status": "ok"}
+    return {
+        "status": "ok",
+        "has_api_key": bool(PERPLEXITY_API_KEY),
+        "model": PERPLEXITY_MODEL,
+    }
 
 
 @app.post("/v1/chat")
 async def chat(req: Request):
-    body = await req.json()
-    messages = body.get("messages", [])
+    try:
+        body = await req.json()
+        messages = body.get("messages", [])
 
-    async with httpx.AsyncClient() as client:
-        response = await client.post(
-            PERPLEXITY_URL,
-            headers={
-                "Authorization": f"Bearer {PERPLEXITY_API_KEY}",
-                "Content-Type": "application/json",
-            },
-            json={
-                "model": PERPLEXITY_MODEL,
-                "messages": messages,
-            },
-            timeout=60,
-        )
-        data = response.json()
+        async with httpx.AsyncClient() as client:
+            response = await client.post(
+                PERPLEXITY_URL,
+                headers={
+                    "Authorization": f"Bearer {PERPLEXITY_API_KEY}",
+                    "Content-Type": "application/json",
+                },
+                json={
+                    "model": PERPLEXITY_MODEL,
+                    "messages": messages,
+                },
+                timeout=60,
+            )
+            data = response.json()
 
-    if "error" in data:
-        return {"answer": f"Ошибка API: {data['error'].get('message', str(data['error']))}"}
+        if "error" in data:
+            return {"answer": f"Ошибка API: {data['error'].get('message', str(data['error']))}"}
 
-    answer = data["choices"][0]["message"]["content"]
+        answer = data["choices"][0]["message"]["content"]
 
-    result = {"answer": answer}
+        result = {"answer": answer}
 
-    citations = data.get("citations")
-    if citations:
-        result["sources"] = [
-            {"title": url, "url": url} for url in citations if isinstance(url, str)
-        ]
+        citations = data.get("citations")
+        if citations:
+            result["sources"] = [
+                {"title": url, "url": url} for url in citations if isinstance(url, str)
+            ]
 
-    return result
+        return result
+    except Exception as e:
+        return {"answer": f"Ошибка сервера: {str(e)}"}
 
 
 @app.post("/v1/analyze/contract")
