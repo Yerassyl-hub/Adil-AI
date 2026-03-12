@@ -18,17 +18,17 @@ app.add_middleware(
 
 STATIC_DIR = Path(__file__).parent / "static"
 
-PERPLEXITY_API_KEY = os.environ.get("PERPLEXITY_API_KEY", "")
-PERPLEXITY_MODEL = os.environ.get("PERPLEXITY_MODEL", "sonar")
-PERPLEXITY_URL = "https://api.perplexity.ai/chat/completions"
+API_KEY = os.environ.get("GEMINI_API_KEY", "")
+MODEL = os.environ.get("MODEL", "gemini-2.0-flash")
+API_URL = "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
 
 
 @app.get("/health")
 def health():
     return {
         "status": "ok",
-        "has_api_key": bool(PERPLEXITY_API_KEY),
-        "model": PERPLEXITY_MODEL,
+        "has_api_key": bool(API_KEY),
+        "model": MODEL,
     }
 
 
@@ -40,13 +40,13 @@ async def chat(req: Request):
 
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                PERPLEXITY_URL,
+                API_URL,
                 headers={
-                    "Authorization": f"Bearer {PERPLEXITY_API_KEY}",
+                    "Authorization": f"Bearer {API_KEY}",
                     "Content-Type": "application/json",
                 },
                 json={
-                    "model": PERPLEXITY_MODEL,
+                    "model": MODEL,
                     "messages": messages,
                 },
                 timeout=60,
@@ -86,12 +86,12 @@ async def analyze_contract(req: Request):
 
     async with httpx.AsyncClient() as client:
         response = await client.post(
-            PERPLEXITY_URL,
+            API_URL,
             headers={
-                "Authorization": f"Bearer {PERPLEXITY_API_KEY}",
+                "Authorization": f"Bearer {API_KEY}",
                 "Content-Type": "application/json",
             },
-            json={"model": PERPLEXITY_MODEL, "messages": messages},
+            json={"model": MODEL, "messages": messages},
             timeout=60,
         )
         data = response.json()
