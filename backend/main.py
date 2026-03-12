@@ -1,7 +1,10 @@
 import os
+from pathlib import Path
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 import httpx
 
 app = FastAPI(title="Adil-AI Backend Proxy")
@@ -12,6 +15,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+STATIC_DIR = Path(__file__).parent / "static"
 
 PERPLEXITY_API_KEY = os.environ.get("PERPLEXITY_API_KEY", "")
 PERPLEXITY_MODEL = os.environ.get("PERPLEXITY_MODEL", "sonar")
@@ -88,3 +93,16 @@ async def analyze_contract(req: Request):
         return {"answer": f"Ошибка API: {data['error'].get('message', str(data['error']))}"}
 
     return {"answer": data["choices"][0]["message"]["content"]}
+
+
+# --- Serve web frontend ---
+if STATIC_DIR.exists():
+    app.mount("/_expo", StaticFiles(directory=STATIC_DIR / "_expo"), name="expo_assets")
+    app.mount("/assets", StaticFiles(directory=STATIC_DIR / "assets"), name="assets")
+
+    @app.get("/{full_path:path}")
+    async def serve_spa(full_path: str):
+        file_path = STATIC_DIR / full_path
+        if file_path.is_file():
+            return FileResponse(file_path)
+        return FileResponse(STATIC_DIR / "index.html")
