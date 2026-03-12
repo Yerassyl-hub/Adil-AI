@@ -18,9 +18,9 @@ app.add_middleware(
 
 STATIC_DIR = Path(__file__).parent / "static"
 
-API_KEY = os.environ.get("GEMINI_API_KEY", "")
-MODEL = os.environ.get("MODEL", "gemini-2.0-flash")
-API_URL = "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
+API_KEY = os.environ.get("PERPLEXITY_API_KEY", "")
+MODEL = os.environ.get("MODEL", "sonar")
+API_URL = "https://api.perplexity.ai/chat/completions"
 
 
 @app.get("/health")
@@ -53,11 +53,14 @@ async def chat(req: Request):
             )
             data = response.json()
 
-        if "error" in data:
+        if isinstance(data, dict) and "error" in data:
             return {"answer": f"Ошибка API: {data['error'].get('message', str(data['error']))}"}
 
-        answer = data["choices"][0]["message"]["content"]
+        choices = data.get("choices") if isinstance(data, dict) else None
+        if not choices:
+            return {"answer": f"Нет ответа от API: {str(data)[:500]}"}
 
+        answer = choices[0]["message"]["content"]
         result = {"answer": answer}
 
         citations = data.get("citations")
@@ -68,7 +71,7 @@ async def chat(req: Request):
 
         return result
     except Exception as e:
-        return {"answer": f"Ошибка сервера: {str(e)}"}
+        return {"answer": f"Ошибка сервера: {type(e).__name__}: {str(e)}"}
 
 
 @app.post("/v1/analyze/contract")
